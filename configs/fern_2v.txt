@@ -1,7 +1,7 @@
 expname = fern_2v
 basedir = ./logs/release
-datadir = ./data/split_allview_npy/fern_2view
-dataset_type = colmap_llff
+datadir = ./data/fern_2view
+dataset_type = llff
 factor = 4
 llffhold = 8
 N_rand = 4096
@@ -15,4 +15,4 @@ depth_loss = True
 depth_lambda = 0.1
 i_testset = 5000
 i_video = 10000
-N_iters = 50000
+N_iters = 55000
