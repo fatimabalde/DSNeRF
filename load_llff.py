@@ -4,6 +4,7 @@ from pathlib import Path
 from colmapUtils.read_write_model import *
 from colmapUtils.read_write_dense import *
 import json
+from PIL import Image
 
 
 ########## Slightly modified version of LLFF data loading code 
@@ -116,6 +117,17 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             return imageio.imread(f)
         
     imgs = imgs = [imread(f)[...,:3]/255. for f in imgfiles]
+    # Load and resize images to the size of the first image 
+    ref_size = imageio.imread(imgfiles[0]).shape[:2]  # Get size of the first image
+    imgs = []
+
+    for f in imgfiles:
+        img = imread(f)[...,:3] / 255.  # Load and normalize
+        if img.shape[:2] != ref_size:
+            print(f"Resizing image {f} from {img.shape[:2]} to {ref_size}")
+            img = np.array(Image.fromarray((img * 255).astype(np.uint8)).resize((ref_size[1],ref_size[0]))) / 255.  # Resize
+        imgs.append(img)
+    
     imgs = np.stack(imgs, -1)  
     
     print('Loaded image data', imgs.shape, poses[:,-1,0])
